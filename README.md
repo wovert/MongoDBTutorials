@@ -1,22 +1,29 @@
-# MongoDB-[零壹码博客](https://lingyima.com)
+# MongoDB
+
 - NoSQL: Not Only SQL 非关系型数据库
 - 内存级读写（毫秒级）
 
-## 为什么出现NoSQL
+## Introduction MongoDB
+
+### 为什么出现NoSQL
+
 > 随着访问量的上升，网站的数据库性能出现问题
 
-## 优点
+### 优点
+
 - 高可扩展性
 - 分布式计算
 - 低成本
 - 架构的灵活性，半结构化数据
 - 没有复杂的关系
 
-## 缺点
+### 缺点
+
 - 没有标准化
 - 有限查询功能
 
-## 分类
+### 分类
+
 - 列存储：Hbase, Cassndra, Hypertable
 - 文档存储：MongoDB, CouchDB
 - key-value存储：Tokyo Cabinet /Tyrant, Berkeley DB, MemcacheDB
@@ -25,15 +32,18 @@
 - xml数据库：Berkeley DB XML, BaseX
 
 ## 用户浏览过程
+
 - user -> application ->redis/mongodb -> mysql
 
-## What [MongoDB](https://mongodb.com)
+### What [MongoDB](https://mongodb.com)
+
 > 分布式文档存储的NoSQL数据库
 
 - C++语言编写，运行稳定、性能高
 - Web 应用提供可扩展的高性能数据存储解决方案
 
 ## MongoDB Features
+
 - 模式自由：不同结构的文档存储在同一个数据库里
 - 面向集合的存储：适合存储 JSON 风格文件的形式
 - 完整的索引支持：对任何属性可索引
@@ -44,55 +54,146 @@
 - 高效的传统存储方式：支持二进制数据及大型对象（图片等）
 
 ## 名词对比
+
 - 解释/SQL/MongoDB
-- 数据库/database/database 
-- 表,集合/table/collection
+- 数据库/database/database
+- 表, 集合/table/collection
 - 记录,文档/row/document
-- 字段,域/column/field
+- 字段, 域或键/column/field/key
 - 索引/index/index
 - 表连接/join/无
 - 主键/primary key/primary key
 
 - 三元素：数据库/集合/文档
-	+ 集合就是关系数据库中的表，存储多个文档
-	+ 文档对应着关系数据库中的行
-	+ 文档，就是一个对象，有键值对构成，是json的扩展BSON形式
+  - 集合就是关系数据库中的表，存储多个文档
+  - 文档对应着关系数据库中的行
+  - 文档，就是一个对象，有键值对构成，是json的扩展BSON形式
+
+## 下载安装 MongoDB
+
+### Windows 下安装
+
+注意：安装之前建立一个目录用于存储**mongodb的数据**
+
+1. 启动服务（指定数据安装目录）`E:\usr_local\mongodb\bin\mongod.exe --dbpath E:\usr_local\mongodb\data`
+2. 配置环境变量 path: `E:\usr_local\mongodb\bin`
+3. 启动数据库服务：修改 **mongodb.bat** 文件
+
+#### mongod服务
+
+mongodb.bat
+
+- 27017端口(原生端口) shell/GUI
+- 28017端口(扩展端口) 用于web服务
+
+#### mongod客户端
+
+```bat
+mongod --dbpath E:\usr_local\mongodb\data
+```
+
+mongo.bat
+
+```bat
+mongo 127.0.0.1:27017
+```
+
+### 操作数据库流程
+
+```bson
+1. 创建数据库（什么都不操作就离开时这个空数据库就会被删除）
+
+use [databasename]
+use temp
+
+2. 查看数据库
+show dbs 显示 admin/config/local 三个数据库
+
+3. 给指定数据库添加集合并且添加记录
+db.persons.insert({name: "wovert"})
+
+集合：persons
+记录：{name:wovert}
+
+4. 显示数据库
+show dbs
+
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+temp    0.000GB
+
+5. 查看当前数据库中的所有文档
+
+show collections
+
+6. 查询指定文档的数据
+
+查询所有：db.[documentName].find()
+查询第一条数据：db.[documentName].fodnOne()
+
+7. 更新文档数据
+
+db.[documentName].update({查询条件}, {$set: {更新内容}})
+
+db.persons.update({name:'wovert'}, {$set: {name: 'wovert.com'}})
+
+var p = db.persons.findOne()
+db.persons.update(p, {name: "mew value"})
+
+8. 删除文档数据
+
+db.[documentName].remove({删除条件})
+
+9. 删除库中的集合
+
+10. 删除数据库
+
+11. shell
+
+12. mongoDB API
+
+数据库和集合命令规范
+
+
+```
 
 ## 服务端 mongod
 
 - 开启验证模式
 `# mongod -f /etc/mongod.conf --fork --auth`
 
-## 客户端 mongo
-
-
 ## 创建用户
+
+```bson
 use admin
 db.createUser({
-	user:'admin',
-	pwd:'adminpwd',
-	roles:[{role:'userAdminAnyDatabase', db:'admin'}]
+  user:'admin',
+  pwd:'adminpwd',
+  roles:[{role:'userAdminAnyDatabase', db:'admin'}]
 })
 db.auth('admin','adminpwd')
 
 use test
 db.createUser({
-	user:'test',
-	pwd:'testpwd',
-	roles:[{role:'readWrite',db:'test'}]
+  user:'test',
+  pwd:'testpwd',
+  roles:[{role:'readWrite',db:'test'}]
 })
 db.auth('test','testpwd')
-
+```
 
 ## MongoDB GUI
+
 - [Robo](https://robomongo.org)
 
 ## 数据类型
+
 - Object ID：文档ID (12byte 16机制)
-	+ 4 byte timestamp
-	+ 3 byte 机器id
-	+ 2 byte mongodb的服务进程id
-	+ 3 byte 增量值
+  - 4 byte timestamp
+  - 3 byte 机器id
+  - 2 byte mongodb的服务进程id
+  - 3 byte 增量值
 - String
 - Boolean
 - Integer
@@ -103,15 +204,14 @@ db.auth('test','testpwd')
 - Timestamp
 - Date
 
-
 ## 数据库操作
 
-- 查看当前数据库：db
-- 查看所有数据库：show dbs
-- 切换数据库：use test
-- 删除当前数据库:db.dropDatabase()
-- 创建数据库：use test
-	+ show dbs 不现实当前数据库
+- 查看当前数据库：`db`
+- 查看所有数据库：`show dbs`
+- 切换数据库：`use test` 没有真正创建数据库，而是临时存放在数据库缓存池当中
+- 删除当前数据库: `db.dropDatabase()`
+- 创建数据库：`use test`
+  - `show dbs` 不现实当前数据库
 
 ## 集合操作
 
@@ -119,16 +219,15 @@ db.auth('test','testpwd')
 	+ db.createCollection("stu", {capped:true, size:10})
 		* capped 覆盖
 
-
 - view: show collections
 - delete: db.集合名.drop()
 
 ## 文档操作
 
 - 插入：
-	+ db.集合名称.insert({...})
+  - db.集合名称.insert({...})
 - 查询:
-	+ db.集合.find()
+  - db.集合.find()
 - 更新：
 	+ db.集合.update({条件}, {修改数据})
 	+ db.集合.update({name:'hr',{$set:{name:'hys'}}}) $set 不修改文档结构
