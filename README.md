@@ -147,16 +147,75 @@ db.[documentName].remove({删除条件})
 
 9. 删除库中的集合
 
+db.persons.drop()
+
 10. 删除数据库
+
+db.dropDatabase()
 
 11. shell
 
+帮助命令：db.help()
+获取数据库名：db.getName()
+获取数据库信息: db.stats()
+集合帮助：db.persons.help()
+
+
 12. mongoDB API
 
-数据库和集合命令规范
+```
 
+### 数据库和集合命令规范
+
+1. 不能是空字符串
+2. 不得含有 ' '(空格)、,(逗号)、$、/、\和\O(空字符)
+3. 应全部小写
+4. 最多64个字节
+5. 数据库名不能与现有系统保留库同名，如admin, local 及config
+
+- 数据库名：ab-cd
+  - use db-cd
+  - db.getCollection("ad-cd").text.insert({}})
+
+### mongoDB的shell内置js引擎可以直接执行js代码
+
+```bson
+function insert(object) {
+  db.getCollection("db-text").insert(object)
+}
+insert({age:32})
+```
+
+shell可以用`eval`
+
+`db.eval("return 'wovert'")`
+
+## BSON是JSOn的扩展
+
+> 新增了如日期、浮点等JSOn不支持的数据类型
+
+- null: 用于表示空或者不存在的字段
+- 布尔：true|false
+- 32/64 bit intege：shell中不支持需用到其他高级语言的驱动来完成，JS不可使用
+- 64bit float: shell中使用的数字其他全是这种类型 {x: 3.14}
+- UTF-8: 字符串类型
+- 对象ID: 内置默认ID对象{_id: ObjectId()}
+- 日期：{x: new Date()}
+- 正则：{x:/wovert/i}
+- JavaScript代码块: {x: function(){...}}
+- undefined: 为定义类型注意它和null不是一个类型
+- 数组：{gps: [20, 23]}
+- 内嵌文档：{x: {name: "wovert"}}
+- 二进制：任意字节的字符串shell中时无法使用的
+
+## 文档操作
+
+### 插入文档
+
+```bson
 
 ```
+
 
 ## 服务端 mongod
 
