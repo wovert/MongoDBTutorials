@@ -234,6 +234,10 @@ db.createUser({
 db.auth('test','testpwd')
 ```
 
+### 修改密码
+
+db.changeUserPassword('username','password');  
+
 ### 帮助操作
 
 - 帮助命令：`db.help()`
